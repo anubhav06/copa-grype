@@ -58,7 +58,7 @@ func (k *GrypeParser) Parse(file string) (*types.UpdateManifest, error) {
 	for i := range report.Matches {
 		vuln := &report.Matches[i]
 		if vuln.Artifact.Language == "" && vuln.Vulnerability.Fix.State == "fixed" {
-			updates.Updates = append(updates.Updates, types.UpdatePackage{Name: vuln.Artifact.Name, Version: vuln.Vulnerability.Fix.Versions[0]})
+			updates.Updates = append(updates.Updates, types.UpdatePackage{Name: vuln.Artifact.Name, InstalledVersion: vuln.Artifact.Version, FixedVersion: vuln.Vulnerability.Fix.Versions[0], VulnerabilityID: vuln.Vulnerability.ID})
 		}
 	}
 	return &updates, nil
@@ -83,6 +83,5 @@ func main() {
 		return
 	}
 
-	// TODO(Discuss): Is this the best way for exchange of data between plugins and copa?
 	os.Stdout.Write(reportBytes)
 }
