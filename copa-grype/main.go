@@ -65,6 +65,9 @@ func (k *GrypeParser) Parse(file string) (*types.UpdateManifest, error) {
 }
 
 func main() {
+	// The apiVersion of copa, for which the plugin is compatible
+	const APIVersion = "v1alpha1"
+
 	// Initialize the parser
 	grypeParser := NewGrypeParser()
 	// Get the image report from command line
@@ -76,8 +79,14 @@ func main() {
 		return
 	}
 
+	// Add apiVersion to the report
+    reportMap := map[string]interface{}{
+        "apiVersion": APIVersion,
+        "report":    report,
+    }
+
 	// Serialize the standardized report and print it to stdout
-	reportBytes, err := json.Marshal(report)
+	reportBytes, err := json.Marshal(reportMap)
 	if err != nil {
 		fmt.Printf("Error serializing report: %v\n", err)
 		return
