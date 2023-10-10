@@ -7,7 +7,7 @@ import (
 	"os"
 
 	grypeTypes "github.com/anchore/grype/grype/presenter/models"
-	"github.com/project-copacetic/copacetic/pkg/types"
+	v1alpha1 "github.com/project-copacetic/copacetic/pkg/types/v1alpha1"
 )
 
 type GrypeParser struct{}
@@ -30,7 +30,7 @@ func NewGrypeParser() *GrypeParser {
 	return &GrypeParser{}
 }
 
-func (k *GrypeParser) Parse(file string) (*types.UpdateManifest, error) {
+func (k *GrypeParser) Parse(file string) (*v1alpha1.UpdateManifest, error) {
 	// Parse the grype scan results
 	report, err := parseGrypeReport(file)
 	if err != nil {
@@ -48,26 +48,24 @@ func (k *GrypeParser) Parse(file string) (*types.UpdateManifest, error) {
 		return nil, err
 	}
 
-	updates := types.UpdateManifest{
-		OSType:    report.Distro.Name,
-		OSVersion: report.Distro.Version,
-		Arch:      report.Source.Target.(map[string]interface{})["architecture"].(string),
+	updates := v1alpha1.UpdateManifest{
+		APIVersion: v1alpha1.APIVersion,
+		OSType:     report.Distro.Name,
+		OSVersion:  report.Distro.Version,
+		Arch:       report.Source.Target.(map[string]interface{})["architecture"].(string),
 	}
 
 	// Check if vulnerability is OS-lvl package & check if vulnerability is fixable
 	for i := range report.Matches {
 		vuln := &report.Matches[i]
 		if vuln.Artifact.Language == "" && vuln.Vulnerability.Fix.State == "fixed" {
-			updates.Updates = append(updates.Updates, types.UpdatePackage{Name: vuln.Artifact.Name, InstalledVersion: vuln.Artifact.Version, FixedVersion: vuln.Vulnerability.Fix.Versions[0], VulnerabilityID: vuln.Vulnerability.ID})
+			updates.Updates = append(updates.Updates, v1alpha1.UpdatePackage{Name: vuln.Artifact.Name, InstalledVersion: vuln.Artifact.Version, FixedVersion: vuln.Vulnerability.Fix.Versions[0], VulnerabilityID: vuln.Vulnerability.ID})
 		}
 	}
 	return &updates, nil
 }
 
 func main() {
-	// The apiVersion of copa, for which the plugin is compatible
-	const APIVersion = "v1alpha1"
-
 	// Initialize the parser
 	grypeParser := NewGrypeParser()
 	// Get the image report from command line
@@ -79,14 +77,8 @@ func main() {
 		return
 	}
 
-	// Add apiVersion to the report
-    reportMap := map[string]interface{}{
-        "apiVersion": APIVersion,
-        "report":    report,
-    }
-
 	// Serialize the standardized report and print it to stdout
-	reportBytes, err := json.Marshal(reportMap)
+	reportBytes, err := json.Marshal(report)
 	if err != nil {
 		fmt.Printf("Error serializing report: %v\n", err)
 		return
