@@ -1,4 +1,4 @@
-module copa-grype
+module github.com/anubhav06/copa-grype
 
 go 1.20
 
