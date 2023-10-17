@@ -1,9 +1,8 @@
-package main
+package grype
 
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"os"
 
 	grypeTypes "github.com/anchore/grype/grype/presenter/models"
@@ -69,26 +68,4 @@ func (k *GrypeParser) Parse(file string) (*v1alpha1.UpdateManifest, error) {
 		}
 	}
 	return &updates, nil
-}
-
-func main() {
-	// Initialize the parser
-	grypeParser := NewGrypeParser()
-	// Get the image report from command line
-	imageReport := os.Args[1]
-
-	report, err := grypeParser.Parse(imageReport)
-	if err != nil {
-		fmt.Printf("Error scanning image: %v\n", err)
-		return
-	}
-
-	// Serialize the standardized report and print it to stdout
-	reportBytes, err := json.Marshal(report)
-	if err != nil {
-		fmt.Printf("Error serializing report: %v\n", err)
-		return
-	}
-
-	os.Stdout.Write(reportBytes)
 }
