@@ -11,7 +11,17 @@ Make sure to add it to your `PATH` environment variable.
 Otherwise, install using the CLI:
 
 ```shell
+# Install the binary
 curl -sL https://github.com/anubhav06/copa-grype/releases/latest/download/copa-grype -o copa-grype
-chmod +x copa-grype
+# Add to PATH
 export PATH=$PATH:/path/to/copagrype/directory
+```
+
+## Example Usage
+```shell
+# test plugin with example config
+copa-grype testdata/grype_report.json
+# this will print the report in JSON format
+# {"apiVersion":"v1alpha1","metadata":{"os":{"type":"FakeOS","version":"42"},"config":{"arch":"amd64"}},"updates":[{"name":"foo","installedVersion":"1.0.0","fixedVersion":"1.0.1","vulnerabilityID":"VULN001"},{"name":"bar","installedVersion":"2.0.0","fixedVersion":"2.0.1","vulnerabilityID":"VULN002"}]}
+
 ```
