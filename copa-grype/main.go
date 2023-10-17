@@ -50,9 +50,15 @@ func (k *GrypeParser) Parse(file string) (*v1alpha1.UpdateManifest, error) {
 
 	updates := v1alpha1.UpdateManifest{
 		APIVersion: v1alpha1.APIVersion,
-		OSType:     report.Distro.Name,
-		OSVersion:  report.Distro.Version,
-		Arch:       report.Source.Target.(map[string]interface{})["architecture"].(string),
+		Metadata: v1alpha1.Metadata{
+			OS: v1alpha1.OS{
+				Type:    report.Distro.Name,
+				Version: report.Distro.Version,
+			},
+			Config: v1alpha1.Config{
+				Arch: report.Source.Target.(map[string]interface{})["architecture"].(string),
+			},
+		},
 	}
 
 	// Check if vulnerability is OS-lvl package & check if vulnerability is fixable
