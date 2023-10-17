@@ -19,4 +19,4 @@ BINS_OUT_DIR      := $(OUT_DIR)/$(GOOS)_$(GOARCH)/$(BUILDTYPE_DIR)
 build: 
 
 	$(info $(INFOMARK) Building $(CLI_BINARY) ...)
-	go build -o $(BINS_OUT_DIR)/$(CLI_BINARY) ./$(CLI_BINARY)/;
+	go build -o $(BINS_OUT_DIR)/$(CLI_BINARY);
