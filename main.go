@@ -9,6 +9,11 @@ import (
 )
 
 func main() {
+	if len(os.Args) != 2 {
+        fmt.Fprintf(os.Stderr, "Usage: %s <image_report>\n", os.Args[0])
+        os.Exit(1)
+    }
+
 	// Initialize the parser
 	grypeParser := copaGrype.NewGrypeParser()
 	// Get the image report from command line
