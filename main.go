@@ -21,14 +21,14 @@ func main() {
 
 	report, err := grypeParser.Parse(imageReport)
 	if err != nil {
-		fmt.Printf("Error scanning image: %v\n", err)
+		fmt.Fprintf(os.Stderr, "error scanning image: %v\n", err)
 		return
 	}
 
 	// Serialize the standardized report and print it to stdout
 	reportBytes, err := json.Marshal(report)
 	if err != nil {
-		fmt.Printf("Error serializing report: %v\n", err)
+		fmt.Fprintf(os.Stderr, "error serializing report: %v\n", err)
 		return
 	}
 
