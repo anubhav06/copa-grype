@@ -21,9 +21,14 @@ export PATH=$PATH:/path/to/copagrype/directory
 
 ## Example Usage
 ```shell
+# generate a grype report
+grype <image> -o json --file grype_report.json
+
 # test plugin with example config
 copa-grype grype_report.json
 # this will print the report in JSON format. Example:
 # {"apiVersion":"v1alpha1","metadata":{"os":{"type":"FakeOS","version":"42"},"config":{"arch":"amd64"}},"updates":[{"name":"foo","installedVersion":"1.0.0","fixedVersion":"1.0.1","vulnerabilityID":"VULN001"},{"name":"bar","installedVersion":"2.0.0","fixedVersion":"2.0.1","vulnerabilityID":"VULN002"}]}
 
+# run copa with the scanner plugin (copa-grype) and the report file
+copa patch -i $IMAGE -r grype_report.json --scanner grype
 ```
