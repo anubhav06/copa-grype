@@ -13,8 +13,10 @@ Make sure to add it to your `PATH` environment variable.
 Otherwise, install using the CLI:
 
 ```shell
-# Install the binary
-curl -sL https://github.com/anubhav06/copa-grype/releases/latest/download/copa-grype -o copa-grype
+# Build the binary from source
+git clone https://github.com/anubhav06/copa-grype.git
+cd copa-grype
+make
 # Add to PATH
 export PATH=$PATH:/path/to/copagrype/directory
 ```
